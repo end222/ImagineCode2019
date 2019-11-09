@@ -1,0 +1,4 @@
+B1;2;Platanos
+B2;5;Manzanas
+B2;1;Peras
+B3;2;Peras
