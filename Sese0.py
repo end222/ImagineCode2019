@@ -196,9 +196,9 @@ for j in list(range(len(obj_fin))):
         string1 = "Coge " +num_fin[j]+ " " +obj_fin[j]+"."
         #print ("Coge " +num_fin[j]+ " " +obj_fin[j]+".")
         tts1 = gTTS(string1 , lang=lang)
-        tts1.save('TTS' + au_i + '.mp3')
+        tts1.save('audios/TTS' + au_i + '.mp3')
         time.sleep(0.5)
-        mixer.music.load('TTS' + au_i + '.mp3')
+        mixer.music.load('audios/TTS' + au_i + '.mp3')
         au_i += 1
         time.sleep(0.5)
         mixer.music.play()
@@ -220,9 +220,9 @@ for j in list(range(len(obj_fin))):
         string2 = "Dejalos en " +pos_fin[j]+"."
         #print ("Dejalos en " +pos_fin[j]+".")
         tts2 = gTTS(string2, lang=lang)
-        tts2.save('TTS' + au_i + '.mp3')
+        tts2.save('audios/TTS' + au_i + '.mp3')
         time.sleep(0.5)
-        mixer.music.load('TTS' + au_i + '.mp3')
+        mixer.music.load('audios/TTS' + au_i + '.mp3')
         au_i += 1
         time.sleep(0.5)
         mixer.music.play()
