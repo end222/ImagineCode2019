@@ -6,12 +6,9 @@ Created on Sat Nov  9 09:42:13 2019
 @author: ubuntelex
 """
 
-import sys
+import sys, traceback
 from gtts import gTTS
 from pygame import mixer
-import time
-
-mixer.init()
 
 class User_Answer:
   def __init__(self, rtype, box, num, obj):
@@ -30,52 +27,25 @@ def analyze(v_text):
 
     i = 0
     rtype = 3
-
-    if lang == "es":
-        while i < len(v_text):
-            if v_text[i] == "desde" or v_text[i] == "de":
-                word_pos = i
-                box = v_text[word_pos+1]
-                rtype = 1
-            elif v_text[i] == "hasta" or v_text[i] == "a" or v_text[i] == "en":
-                word_pos = i
-                box = v_text[word_pos+1]
-                rtype = 2
-
-            if v_text[i] in num_es or v_text[i].isdigit():
-                num = v_text[i]
-                obj = v_text[i+1]
-
-            i += 1
-
-        if v_text[0] == "saltar":
+    while i < len(v_text):
+        if v_text[i] == "desde" or v_text[i] == "de":
+            word_pos = i
+            rtype = 1
+        elif v_text[i] == "hasta" or v_text[i] == "a" or v_text[i] == "en":
+            word_pos = i
+            rtype = 2
+        elif v_text[0] == "saltar":
             rtype = 4
             num = 0
             obj = ""
             box = ""
 
-    elif lang == "en":
-        while i < len(v_text):
-            if v_text[i] == "from":
-                word_pos = i
-                box = v_text[word_pos+1]
-                rtype = 1
-            elif v_text[i] == "to":
-                word_pos = i
-                box = v_text[word_pos+1]
-                rtype = 2
+        if v_text[i] in num_es or v_text[i].isdigit():
+            num = v_text[i]
+            obj = v_text[i+1]
+            box = v_text[word_pos+1]
 
-            if v_text[i] in num_es or v_text[i].isdigit():
-                num = v_text[i]
-                obj = v_text[i+1]
-
-            i += 1
-
-        if v_text[0] == "saltar":
-            rtype = 4
-            num = 0
-            obj = ""
-            box = ""
+        i += 1
 
     return User_Answer(rtype, box, num, obj)
 
@@ -97,13 +67,6 @@ num_es = [
     "diecisiete", "dieciocho", "diecinueve", "veinte",
     "veintiuno", "veintidós", "veintitrés", "veinticuatro",
     "veintiséis", "veintisiete", "veintiocho", "veintinueve"
-]
-
-num_en = [
-    "one", "two", "three", "four", "five", "six", "seven", "eight",
-    "eleven", "nine", "ten", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
-    "seventeen", "eighteen", "nineteen", "twenty", "twenty-one", "thirty-one", "twenty-two", "twenty-three",
-    "twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight", "twenty-nine"
 ]
 
 pos_ini = []
@@ -171,14 +134,14 @@ for j in list(range(len(obj_fin))):
     recibido2 = False
     while (recibido1 == False):
         string1 = "Coge " +num_fin[j]+ " " +obj_fin[j]+"."
+        #print (string1)
         #print ("Coge " +num_fin[j]+ " " +obj_fin[j]+".")
         tts1 = gTTS(string1 , lang=lang)
         tts1.save('TTS1.mp3')
-        time.sleep(0.5)
+        mixer.init()
         mixer.music.load('TTS1.mp3')
-        time.sleep(0.5)
         mixer.music.play()
-        log.write("SISTEMA: "+string1+"\n")
+        log.write("SISTEMA: Coge " +num_fin[j]+ " " +obj_fin[j]+".\n")
         #Comprobacion
         text = input("Respuesta: ").lower()
         log.write("USUARIO: " + text + "\n")
@@ -192,23 +155,16 @@ for j in list(range(len(obj_fin))):
         if not recibido1:
             print ("Incorrecto, repito orden.")
     while (recibido2 == False):
-        string2 = "Dejalos en " +pos_fin[j]+"."
-        #print ("Dejalos en " +pos_fin[j]+".")
-        tts2 = gTTS(string2, lang=lang)
-        tts2.save('TTS2.mp3')
-        time.sleep(0.5)
-        mixer.music.load('TTS2.mp3')
-        time.sleep(0.5)
-        mixer.music.play()
+        print ("Dejalos en " +pos_fin[j]+".")
+        tts2 = gTTS("Dejalos en " +pos_fin[j]+"." , lang=lang)
         log.write("SISTEMA: Dejalos en " +pos_fin[j]+".\n")
         #Comprobacion
         text = input("Respuesta: ").lower()
         log.write("USUARIO: " + text + "\n")
         text_v = text.split()
         output = analyze(text_v)
-        print(output.box)
-        print(output.rtype)
-        if pos_fin[j].lower() == output.box and output.rtype == 2:
+
+        if pos_fin[j] == output.box and output.rtype == 2:
             recibido2 = True
         elif output.rtype == 4:
             recibido2 = True
