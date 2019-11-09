@@ -32,13 +32,18 @@ def analyze(v_text):
         elif v_text[i] == "hasta" or v_text[i] == "a" or v_text[i] == "en":
             word_pos = i
             rtype = 2
+        elif v_text[0] == "saltar":
+            rtype = 4
+            num = 0
+            obj = ""
+            box = ""
 
-        if v_text[i] in num_es or  v_text[i].isdigit():
+        if v_text[i] in num_es or v_text[i].isdigit():
             num = v_text[i]
             obj = v_text[i+1]
+            box = v_text[word_pos+1]
 
         i += 1
-    box = v_text[word_pos+1]
 
     return User_Answer(rtype, box, num, obj)
 
@@ -47,6 +52,7 @@ def analyze(v_text):
 
 inicial = open("inicial.txt")
 final = open("final.txt")
+log = open("Sese0.log","w") 
 
 num_es = [
     "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho",
@@ -121,22 +127,32 @@ for j in list(range(len(obj_fin))):
     recibido2 = False
     while (recibido1 == False):
         print ("Coge " +num_fin[j]+ " " +obj_fin[j]+".")
+        log.write("SISTEMA: Coge " +num_fin[j]+ " " +obj_fin[j]+".\n")
         #Comprobacion
-        text_v = input("Respuesta: ").lower().split()
+        text = input("Respuesta: ").lower()
+        log.write("USUARIO: " + text + "\n")
+        text_v = text.split()
         output = analyze(text_v)
         if num_fin[j] == output.num and obj_fin[j].lower() == output.obj and output.rtype == 1:
+            recibido1 = True
+        elif output.rtype == 4:
             recibido1 = True
 
         if not recibido1:
             print ("Incorrecto, repito orden.")
     while (recibido2 == False):
         print ("Dejalos en " +pos_fin[j]+".")
+        log.write("SISTEMA: Dejalos en " +pos_fin[j]+".\n")
         #Comprobacion
-        text_v = input("Respuesta: ").lower().split()
+        text = input("Respuesta: ").lower()
+        log.write("USUARIO: " + text + "\n")
+        text_v = text.split()
         output = analyze(text_v)
 
         if pos_fin[j] == output.box and output.rtype == 2:
             recibido2 = True
-        recibido2 = True
+        elif output.rtype == 4:
+            recibido2 = True
+
         if not recibido2:
             print ("Incorrecto repito orden.")
