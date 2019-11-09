@@ -6,6 +6,8 @@ Created on Sat Nov  9 09:42:13 2019
 @author: ubuntelex
 """
 
+au_i = 0
+
 import sys
 from gtts import gTTS
 from pygame import mixer
@@ -194,9 +196,10 @@ for j in list(range(len(obj_fin))):
         string1 = "Coge " +num_fin[j]+ " " +obj_fin[j]+"."
         #print ("Coge " +num_fin[j]+ " " +obj_fin[j]+".")
         tts1 = gTTS(string1 , lang=lang)
-        tts1.save('TTS1.mp3')
+        tts1.save('TTS' + au_i + '.mp3')
         time.sleep(0.5)
-        mixer.music.load('TTS1.mp3')
+        mixer.music.load('TTS' + au_i + '.mp3')
+        au_i += 1
         time.sleep(0.5)
         mixer.music.play()
         log.write("SISTEMA: "+string1+"\n")
@@ -217,9 +220,10 @@ for j in list(range(len(obj_fin))):
         string2 = "Dejalos en " +pos_fin[j]+"."
         #print ("Dejalos en " +pos_fin[j]+".")
         tts2 = gTTS(string2, lang=lang)
-        tts2.save('TTS2.mp3')
+        tts2.save('TTS' + au_i + '.mp3')
         time.sleep(0.5)
-        mixer.music.load('TTS2.mp3')
+        mixer.music.load('TTS' + au_i + '.mp3')
+        au_i += 1
         time.sleep(0.5)
         mixer.music.play()
         log.write("SISTEMA: Dejalos en " +pos_fin[j]+".\n")
