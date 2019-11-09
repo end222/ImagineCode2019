@@ -25,25 +25,52 @@ def analyze(v_text):
 
     i = 0
     rtype = 3
-    while i < len(v_text):
-        if v_text[i] == "desde" or v_text[i] == "de":
-            word_pos = i
-            rtype = 1
-        elif v_text[i] == "hasta" or v_text[i] == "a" or v_text[i] == "en":
-            word_pos = i
-            rtype = 2
-        elif v_text[0] == "saltar":
+
+    if lang == "es":
+        while i < len(v_text):
+            if v_text[i] == "desde" or v_text[i] == "de":
+                word_pos = i
+                box = v_text[word_pos+1]
+                rtype = 1
+            elif v_text[i] == "hasta" or v_text[i] == "a" or v_text[i] == "en":
+                word_pos = i
+                box = v_text[word_pos+1]
+                rtype = 2
+
+            if v_text[i] in num_es or v_text[i].isdigit():
+                num = v_text[i]
+                obj = v_text[i+1]
+
+            i += 1
+
+        if v_text[0] == "saltar":
             rtype = 4
             num = 0
             obj = ""
             box = ""
 
-        if v_text[i] in num_es or v_text[i].isdigit():
-            num = v_text[i]
-            obj = v_text[i+1]
-            box = v_text[word_pos+1]
+    elif lang == "en":
+        while i < len(v_text):
+            if v_text[i] == "from":
+                word_pos = i
+                box = v_text[word_pos+1]
+                rtype = 1
+            elif v_text[i] == "to":
+                word_pos = i
+                box = v_text[word_pos+1]
+                rtype = 2
 
-        i += 1
+            if v_text[i] in num_es or v_text[i].isdigit():
+                num = v_text[i]
+                obj = v_text[i+1]
+
+            i += 1
+
+        if v_text[0] == "saltar":
+            rtype = 4
+            num = 0
+            obj = ""
+            box = ""
 
     return User_Answer(rtype, box, num, obj)
 
@@ -60,6 +87,13 @@ num_es = [
     "diecisiete", "dieciocho", "diecinueve", "veinte",
     "veintiuno", "veintidós", "veintitrés", "veinticuatro",
     "veintiséis", "veintisiete", "veintiocho", "veintinueve"
+]
+
+num_en = [
+    "one", "two", "three", "four", "five", "six", "seven", "eight",
+    "eleven", "nine", "ten", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+    "seventeen", "eighteen", "nineteen", "twenty", "twenty-one", "thirty-one", "twenty-two", "twenty-three",
+    "twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight", "twenty-nine"
 ]
 
 pos_ini = []
