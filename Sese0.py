@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Nov  9 09:42:13 2019
-
 @author: ubuntelex
 """
 
@@ -196,20 +195,26 @@ for j in list(range(len(obj_fin))):
         string1 = "Coge " +num_fin[j]+ " " +obj_fin[j]+"."
         #print ("Coge " +num_fin[j]+ " " +obj_fin[j]+".")
         tts1 = gTTS(string1 , lang=lang)
-        tts1.save('audios/TTS' + au_i + '.mp3')
+        tts1.save('audios/TTS' + str(au_i) + '.mp3')
         time.sleep(0.5)
-        mixer.music.load('audios/TTS' + au_i + '.mp3')
+        mixer.music.load('audios/TTS' + str(au_i) + '.mp3')
         au_i += 1
         time.sleep(0.5)
         mixer.music.play()
+        time.sleep(2)
         log.write("SISTEMA: "+string1+"\n")
         #Comprobacion
         text = get_audio_to_text()
+        print("Has dicho: "+text)
         #text = input("Respuesta: ").lower()
         log.write("USUARIO: " + text + "\n")
         text_v = text.split()
         output = analyze(text_v)
-        if num_fin[j] == output.num and obj_fin[j].lower() == output.obj and output.rtype == 1:
+        print(num_es[int(num_fin[j])-1])
+        print(output.num)
+        print(obj_fin[j].lower())
+        print(output.obj)
+        if num_es[int(num_fin[j])-1] == output.num and obj_fin[j].lower() == output.obj and output.rtype == 1:
             recibido1 = True
         elif output.rtype == 4:
             recibido1 = True
@@ -220,12 +225,13 @@ for j in list(range(len(obj_fin))):
         string2 = "Dejalos en " +pos_fin[j]+"."
         #print ("Dejalos en " +pos_fin[j]+".")
         tts2 = gTTS(string2, lang=lang)
-        tts2.save('audios/TTS' + au_i + '.mp3')
+        tts2.save('audios/TTS' + str(au_i) + '.mp3')
         time.sleep(0.5)
-        mixer.music.load('audios/TTS' + au_i + '.mp3')
+        mixer.music.load('audios/TTS' + str(au_i) + '.mp3')
         au_i += 1
         time.sleep(0.5)
         mixer.music.play()
+        time.sleep(2)
         log.write("SISTEMA: Dejalos en " +pos_fin[j]+".\n")
         #Comprobacion
         text = get_audio_to_text()
@@ -233,9 +239,9 @@ for j in list(range(len(obj_fin))):
         log.write("USUARIO: " + text + "\n")
         text_v = text.split()
         output = analyze(text_v)
-        print(output.box)
-        print(output.rtype)
-        if pos_fin[j].lower() == output.box and output.rtype == 2:
+        print(pos_fin[j].lower())
+        print(output.box.lower())
+        if pos_fin[j].lower() == output.box.lower() and output.rtype == 2:
             recibido2 = True
         elif output.rtype == 4:
             recibido2 = True
