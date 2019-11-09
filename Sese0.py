@@ -34,7 +34,10 @@ def get_audio_to_text():
         print("Say something!")
         audio = r.listen(source)
     try:
-        return r.recognize_google_cloud(audio, credentials_json=SPEECH_JSON, language="es-ES")
+        if lang == "es":
+            return r.recognize_google_cloud(audio, credentials_json=SPEECH_JSON, language="es-ES")
+        else:
+            return r.recognize_google_cloud(audio, credentials_json=SPEECH_JSON)
     except sr.UnknownValueError:
         return "Error"
     except sr.RequestError as e:
@@ -82,12 +85,12 @@ def analyze(v_text):
                 word_pos = i
                 box = v_text[word_pos+1]
                 rtype = 1
-            elif v_text[i] == "to":
+            elif v_text[i] == "to" or v_text[i] == "on":
                 word_pos = i
                 box = v_text[word_pos+1]
                 rtype = 2
 
-            if v_text[i] in num_es or v_text[i].isdigit():
+            if v_text[i] in num_en or v_text[i].isdigit():
                 num = v_text[i]
                 obj = v_text[i+1]
 
@@ -192,8 +195,17 @@ for j in list(range(len(obj_fin))):
     recibido1 = False
     recibido2 = False
     while (recibido1 == False):
-        string1 = "Coge " +num_fin[j]+ " " +obj_fin[j]+"."
-        #print ("Coge " +num_fin[j]+ " " +obj_fin[j]+".")
+        if lang == "es":
+            string1 = "Coge " +num_fin[j]+ " " +obj_fin[j]
+            if int(num_fin[j]) > 1:
+                string1 += "s"
+            string1 += "."
+        else:
+            string1 = "Take " +num_fin[j]+ " " +obj_fin[j]
+            if int(num_fin[j]) > 1:
+                string1 += "s"
+            string1 += "."
+        print (string1)
         tts1 = gTTS(string1 , lang=lang)
         tts1.save('audios/TTS' + str(au_i) + '.mp3')
         time.sleep(0.5)
@@ -210,11 +222,17 @@ for j in list(range(len(obj_fin))):
         log.write("USUARIO: " + text + "\n")
         text_v = text.split()
         output = analyze(text_v)
+        producto = obj_fin[j].lower()
+
+        # Tener en cuenta que el usuario lo dirá en plural si coge más de 1
+        if int(num_fin[j]) > 1:
+            producto += "s"
+        print(producto)
+        print(output.obj)
         print(num_es[int(num_fin[j])-1])
         print(output.num)
-        print(obj_fin[j].lower())
-        print(output.obj)
-        if num_es[int(num_fin[j])-1] == output.num and obj_fin[j].lower() == output.obj and output.rtype == 1:
+        print(str(output.rtype))
+        if (lang == "es" and num_es[int(num_fin[j])-1] == output.num) or (lang == "en" and num_en[int(num_fin[j])-1] == output.num) and producto == output.obj and output.rtype == 1:
             recibido1 = True
         elif output.rtype == 4:
             recibido1 = True
@@ -222,8 +240,11 @@ for j in list(range(len(obj_fin))):
         if not recibido1:
             print ("Incorrecto, repito orden.")
     while (recibido2 == False):
-        string2 = "Dejalos en " +pos_fin[j]+"."
-        #print ("Dejalos en " +pos_fin[j]+".")
+        string2 = "Dejalo"
+        if int(num_fin[j]) > 1:
+            string2 += "s"
+        string2 += " en " +pos_fin[j]+"."
+        print (string2)
         tts2 = gTTS(string2, lang=lang)
         tts2.save('audios/TTS' + str(au_i) + '.mp3')
         time.sleep(0.5)
