@@ -1,3 +1,0 @@
-B1;3;Fresa
-B2;5;Manzana
-B2;1;Pera
