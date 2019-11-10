@@ -1,4 +1,0 @@
-O1;3;Rojo
-O2;5;Verde
-O2;1;Celeste
-O1;3;Morado

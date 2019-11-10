@@ -1,5 +1,0 @@
-J1;8;Rojo
-J2;10;Verde
-J3;8;Naranja
-J4;8;Amarillo
-J5;8;Morado

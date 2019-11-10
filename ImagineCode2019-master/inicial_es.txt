@@ -1,6 +1,0 @@
-A1;8;Rojo
-A2;10;Verde
-A3;8;Naranja
-A4;8;Amarillo
-A5;8;Celeste
-A6;8;Morado

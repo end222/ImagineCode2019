@@ -1,4 +1,0 @@
-E1;4;Orange
-E2;5;Green
-E2;1;Blue
-E1;3;Purple
